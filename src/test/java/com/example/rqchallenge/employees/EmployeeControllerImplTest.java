@@ -54,8 +54,7 @@ class EmployeeControllerImplTest {
 
         when(employeeService.findByName(anyString())).thenReturn(employeeList);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/employee/search/{searchString}", "john")
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.get("/employee/search/{searchString}", "john").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andDo(print());
     }
@@ -71,8 +70,7 @@ class EmployeeControllerImplTest {
 
         when(employeeService.findById(anyString())).thenReturn(employee);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/employee/{id}}", "101")
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.get("/employee/{id}}", "101").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(101)))
                 .andExpect(jsonPath("$.employee_age", is(32)))
                 .andExpect(jsonPath("$.employee_name", is("John")))
@@ -88,8 +86,7 @@ class EmployeeControllerImplTest {
 
         when(employeeService.findHighestSalary()).thenReturn(highestSalary);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/employee/highestSalary")
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.get("/employee/highestSalary").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", is(1000)))
                 .andDo(print());
     }
@@ -99,8 +96,7 @@ class EmployeeControllerImplTest {
         List<String> highestEarningEmployees = Arrays.asList("John", "Jonathan", "Jimmy");
         when(employeeService.getTopTenHighestEarningEmployeeNames()).thenReturn(highestEarningEmployees);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/employee/topTenHighestEarningEmployeeNames")
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.get("/employee/topTenHighestEarningEmployeeNames").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andDo(print());
     }
