@@ -23,22 +23,22 @@ public class EmployeeControllerImpl implements IEmployeeController {
 
     @Override
     public ResponseEntity<List<Employee>> getEmployeesByNameSearch(String searchString) {
-        return null;
+        return new ResponseEntity<>(employeeService.findByName(searchString), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Employee> getEmployeeById(String id) {
-        return null;
+        return new ResponseEntity<>(employeeService.findById(id), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Integer> getHighestSalaryOfEmployees() {
-        return null;
+        return new ResponseEntity<>(employeeService.findHighestSalary(), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<List<String>> getTopTenHighestEarningEmployeeNames() {
-        return null;
+        return new ResponseEntity<>(employeeService.getTopTenHighestEarningEmployeeNames(), HttpStatus.OK);
     }
 
     @Override

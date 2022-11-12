@@ -11,9 +11,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -42,19 +46,63 @@ class EmployeeControllerImplTest {
     }
 
     @Test
-    void getEmployeesByNameSearch() {
+    void getEmployeesByNameSearch() throws Exception {
+        List<Employee> employeeList = new ArrayList<>();
+        employeeList.add(new Employee());
+        employeeList.add(new Employee());
+        employeeList.add(new Employee());
+
+        when(employeeService.findByName(anyString())).thenReturn(employeeList);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/employee/search/{searchString}", "john")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(3)))
+                .andDo(print());
     }
 
     @Test
-    void getEmployeeById() {
+    void getEmployeeById() throws Exception {
+        Employee employee = new Employee();
+        employee.setId(101);
+        employee.setEmployee_age(32);
+        employee.setEmployee_name("John");
+        employee.setEmployee_salary(1000);
+        employee.setProfile_image("");
+
+        when(employeeService.findById(anyString())).thenReturn(employee);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/employee/{id}}", "101")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(101)))
+                .andExpect(jsonPath("$.employee_age", is(32)))
+                .andExpect(jsonPath("$.employee_name", is("John")))
+                .andExpect(jsonPath("$.employee_salary", is(1000)))
+                .andExpect(jsonPath("$.profile_image", isEmptyString()))
+                .andDo(print());
     }
 
     @Test
-    void getHighestSalaryOfEmployees() {
+    void getHighestSalaryOfEmployees() throws Exception {
+
+        Integer highestSalary = 1000;
+
+        when(employeeService.findHighestSalary()).thenReturn(highestSalary);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/employee/highestSalary")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", is(1000)))
+                .andDo(print());
     }
 
     @Test
-    void getTopTenHighestEarningEmployeeNames() {
+    void getTopTenHighestEarningEmployeeNames() throws Exception {
+        List<String> highestEarningEmployees = Arrays.asList("John", "Jonathan", "Jimmy");
+        when(employeeService.getTopTenHighestEarningEmployeeNames()).thenReturn(highestEarningEmployees);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/employee/topTenHighestEarningEmployeeNames")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(3)))
+                .andDo(print());
     }
 
     @Test
