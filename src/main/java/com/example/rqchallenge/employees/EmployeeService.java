@@ -26,4 +26,12 @@ public class EmployeeService {
     public List<String> getTopTenHighestEarningEmployeeNames() {
         return null;
     }
+
+    public Employee create(Employee employee) {
+        return new Employee();
+    }
+
+    public String deleteById(String id) {
+        return null;
+    }
 }

@@ -43,11 +43,16 @@ public class EmployeeControllerImpl implements IEmployeeController {
 
     @Override
     public ResponseEntity<Employee> createEmployee(Map<String, Object> employeeInput) {
-        return null;
+        Employee employee = new Employee();
+        employee.setEmployee_name(employeeInput.get("name").toString());
+        employee.setEmployee_age(Integer.parseInt(employeeInput.get("age").toString()));
+        employee.setEmployee_salary(Integer.parseInt(employeeInput.get("salary").toString()));
+
+        return new ResponseEntity<>(employeeService.create(employee), HttpStatus.CREATED);
     }
 
     @Override
     public ResponseEntity<String> deleteEmployeeById(String id) {
-        return null;
+        return new ResponseEntity<>(employeeService.deleteById(id), HttpStatus.OK);
     }
 }

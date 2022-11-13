@@ -1,5 +1,6 @@
 package com.example.rqchallenge.employees;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,17 +11,17 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest
@@ -41,6 +42,7 @@ class EmployeeControllerImplTest {
         when(employeeService.getAll()).thenReturn(employeeList);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/employee").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andDo(print());
     }
@@ -55,6 +57,7 @@ class EmployeeControllerImplTest {
         when(employeeService.findByName(anyString())).thenReturn(employeeList);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/employee/search/{searchString}", "john").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andDo(print());
     }
@@ -71,6 +74,7 @@ class EmployeeControllerImplTest {
         when(employeeService.findById(anyString())).thenReturn(employee);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/employee/{id}}", "101").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(101)))
                 .andExpect(jsonPath("$.employee_age", is(32)))
                 .andExpect(jsonPath("$.employee_name", is("John")))
@@ -87,6 +91,7 @@ class EmployeeControllerImplTest {
         when(employeeService.findHighestSalary()).thenReturn(highestSalary);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/employee/highestSalary").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$", is(1000)))
                 .andDo(print());
     }
@@ -97,15 +102,36 @@ class EmployeeControllerImplTest {
         when(employeeService.getTopTenHighestEarningEmployeeNames()).thenReturn(highestEarningEmployees);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/employee/topTenHighestEarningEmployeeNames").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andDo(print());
     }
 
     @Test
-    void createEmployee() {
+    void createEmployee() throws Exception {
+        Map<String, Object> employeeInput = new HashMap<>() {{
+            put("name", "John");
+            put("salary", "1000");
+            put("age", "32");
+        }};
+
+        when(employeeService.create(any(Employee.class))).thenReturn(new Employee());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/employee").contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(employeeInput)))
+                .andExpect(status().isCreated())
+                .andDo(print());
     }
 
     @Test
-    void deleteEmployeeById() {
+    void deleteEmployeeById() throws Exception {
+        String deletedEmployee = "John";
+
+        when(employeeService.deleteById(any(String.class))).thenReturn(deletedEmployee);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/employee/{id}", "101").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", is("John")))
+                .andDo(print());
     }
 }
