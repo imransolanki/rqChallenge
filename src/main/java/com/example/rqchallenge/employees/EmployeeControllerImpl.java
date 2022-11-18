@@ -13,6 +13,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("employee")
 public class EmployeeControllerImpl implements IEmployeeController {
+
     @Autowired
     EmployeeService employeeService;
 
@@ -44,9 +45,9 @@ public class EmployeeControllerImpl implements IEmployeeController {
     @Override
     public ResponseEntity<Employee> createEmployee(Map<String, Object> employeeInput) {
         Employee employee = new Employee();
-        employee.setEmployee_name(employeeInput.get("name").toString());
-        employee.setEmployee_age(Integer.parseInt(employeeInput.get("age").toString()));
-        employee.setEmployee_salary(Integer.parseInt(employeeInput.get("salary").toString()));
+        employee.setName(employeeInput.get("name").toString());
+        employee.setAge(Integer.parseInt(employeeInput.get("age").toString()));
+        employee.setSalary(Integer.parseInt(employeeInput.get("salary").toString()));
 
         return new ResponseEntity<>(employeeService.create(employee), HttpStatus.CREATED);
     }

@@ -1,12 +1,16 @@
 package com.example.rqchallenge.employees;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Employee {
     Integer id;
-    String employee_name;
-    Integer employee_salary;
-    Integer employee_age;
-    String profile_image;
+    String name;
+    Integer salary;
+    Integer age;
+    String profileImage;
 }

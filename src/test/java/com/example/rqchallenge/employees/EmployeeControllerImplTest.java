@@ -66,20 +66,20 @@ class EmployeeControllerImplTest {
     void getEmployeeById() throws Exception {
         Employee employee = new Employee();
         employee.setId(101);
-        employee.setEmployee_age(32);
-        employee.setEmployee_name("John");
-        employee.setEmployee_salary(1000);
-        employee.setProfile_image("");
+        employee.setAge(32);
+        employee.setName("John");
+        employee.setSalary(1000);
+        employee.setProfileImage("");
 
         when(employeeService.findById(anyString())).thenReturn(employee);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/employee/{id}}", "101").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(101)))
-                .andExpect(jsonPath("$.employee_age", is(32)))
-                .andExpect(jsonPath("$.employee_name", is("John")))
-                .andExpect(jsonPath("$.employee_salary", is(1000)))
-                .andExpect(jsonPath("$.profile_image", isEmptyString()))
+                .andExpect(jsonPath("$.age", is(32)))
+                .andExpect(jsonPath("$.name", is("John")))
+                .andExpect(jsonPath("$.salary", is(1000)))
+                .andExpect(jsonPath("$.profileImage", isEmptyString()))
                 .andDo(print());
     }
 
