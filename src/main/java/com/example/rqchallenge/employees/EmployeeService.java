@@ -1,24 +1,19 @@
 package com.example.rqchallenge.employees;
 
+import com.example.rqchallenge.model.api.response.DeleteById.DeleteByIdResponse;
 import com.example.rqchallenge.model.api.response.GetAllEmployee.GetAllEmployeeResponse;
 import com.example.rqchallenge.model.api.response.findById.Data;
 import com.example.rqchallenge.model.api.response.findById.FindByIdResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import static java.util.Arrays.asList;
 
 @Service
 @Slf4j
@@ -84,13 +79,13 @@ public class EmployeeService {
     }
 
     public String deleteById(String id) {
-        return null;
-    }
-
-    private HttpEntity<String> getEntity() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(asList(MediaType.APPLICATION_JSON));
-        return new HttpEntity<>(headers);
+        try {
+            restTemplate.delete(BASE_URL + "/api/v1/delete/" + id);
+            log.info("Employee deleted with the id {}", id);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return "success";
     }
 
 }

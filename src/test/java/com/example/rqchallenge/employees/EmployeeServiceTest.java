@@ -61,4 +61,15 @@ class EmployeeServiceTest {
         com.example.rqchallenge.employees.Employee response = employeeService.findById("101");
         Assertions.assertEquals(101, response.getId());
     }
+
+    @Test
+    void deleteById() {
+        Mockito
+                .doNothing()
+                .when(restTemplate).delete("https://dummy.restapiexample.com" + "/api/v1/delete/101");
+
+        String response = employeeService.deleteById("101");
+        Assertions.assertEquals("success", response);
+
+    }
 }
