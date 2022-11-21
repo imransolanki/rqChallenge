@@ -10,23 +10,24 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
 class EmployeeServiceTest {
 
     @Mock
     private RestTemplate restTemplate;
+
     @Mock
-    private ConversionService conversionService;
+    ConversionService conversionService;
 
     @InjectMocks
     private EmployeeService employeeService;
@@ -63,6 +64,27 @@ class EmployeeServiceTest {
     }
 
     @Test
+    void findHighestSalary() {
+        GetAllEmployeeResponse mockedResponse = new GetAllEmployeeResponse();
+        mockedResponse.setStatus("success");
+
+        Employee first = new Employee();
+        first.setEmployeeSalary(1000);
+
+        Employee second = new Employee();
+        second.setEmployeeSalary(2000);
+
+        mockedResponse.setData(Arrays.asList(first, second));
+
+        Mockito
+                .when(restTemplate.getForEntity("https://dummy.restapiexample.com" + "/api/v1/employees", GetAllEmployeeResponse.class))
+                .thenReturn(new ResponseEntity<>(mockedResponse, HttpStatus.OK));
+
+        Integer highestSalary = employeeService.findHighestSalary();
+        Assertions.assertEquals(2000, highestSalary);
+    }
+
+    @Test
     void deleteById() {
         Mockito
                 .doNothing()
@@ -70,6 +92,5 @@ class EmployeeServiceTest {
 
         String response = employeeService.deleteById("101");
         Assertions.assertEquals("success", response);
-
     }
 }

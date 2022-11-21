@@ -96,7 +96,7 @@ class EmployeeControllerImplTest {
                 .andDo(print());
     }
 
-    @Test
+    /*@Test
     void getTopTenHighestEarningEmployeeNames() throws Exception {
         List<String> highestEarningEmployees = Arrays.asList("John", "Jonathan", "Jimmy");
         when(employeeService.getTopTenHighestEarningEmployeeNames()).thenReturn(highestEarningEmployees);
@@ -105,9 +105,9 @@ class EmployeeControllerImplTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andDo(print());
-    }
+    }*/
 
-    @Test
+    /*@Test
     void createEmployee() throws Exception {
         Map<String, Object> employeeInput = new HashMap<>() {{
             put("name", "John");
@@ -121,7 +121,7 @@ class EmployeeControllerImplTest {
                 .content(new ObjectMapper().writeValueAsString(employeeInput)))
                 .andExpect(status().isCreated())
                 .andDo(print());
-    }
+    }*/
 
     @Test
     void deleteEmployeeById() throws Exception {

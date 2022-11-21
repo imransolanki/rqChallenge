@@ -43,13 +43,13 @@ public class EmployeeControllerImpl implements IEmployeeController {
     }
 
     @Override
-    public ResponseEntity<Employee> createEmployee(Map<String, Object> employeeInput) {
+    public ResponseEntity<Employee> createEmployee(Map<String, Object> employeeInput) throws Exception {
         Employee employee = new Employee();
         employee.setName(employeeInput.get("name").toString());
         employee.setAge(Integer.parseInt(employeeInput.get("age").toString()));
         employee.setSalary(Integer.parseInt(employeeInput.get("salary").toString()));
 
-        return new ResponseEntity<>(employeeService.create(employee), HttpStatus.CREATED);
+        return new ResponseEntity<>(employeeService.create(employeeInput), HttpStatus.CREATED);
     }
 
     @Override
