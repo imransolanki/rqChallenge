@@ -111,7 +111,8 @@ public class EmployeeService {
 
     public Employee create(Map<String, Object> employeeInput) throws Exception {
         ResponseEntity<CreateEmployeeResponse> response =
-                restTemplate.postForEntity(BASE_URL + "/api/v1/create", null, CreateEmployeeResponse.class, employeeInput);
+                restTemplate.postForEntity(BASE_URL + "/api/v1/create", employeeInput, CreateEmployeeResponse.class);
+
         if (!"success".equalsIgnoreCase(response.getBody().getStatus())) {
             throw new Exception("failure");
         }
